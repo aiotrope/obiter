@@ -5,7 +5,6 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
-import { GraphQLError } from 'graphql'
 import express from 'express'
 import http from 'http'
 import cors from 'cors'
@@ -53,9 +52,10 @@ const startGraphQLServer = async () => {
   const server = new ApolloServer({
     schema,
     context: async ({ req }) => {
-      const token = req.headers.authorization || ''
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1]
       if (token) {
-        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
         const authUser = await UserModel.findById(decoded.id)
           .populate('commentsMade')
           .populate('posts')
@@ -76,16 +76,16 @@ const startGraphQLServer = async () => {
     ],
   })
   await server.start()
-
   app.use(
     '/',
     cors(),
     bodyParser.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
-        const token = req.headers.authorization || ''
+        const authHeader = req.headers['authorization']
+        const token = authHeader && authHeader.split(' ')[1]
         if (token) {
-          const decoded = jwt.verify(token, process.env.SECRET_KEY)
+          const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
           const authUser = await UserModel.findById(decoded.id)
             .populate('commentsMade')
             .populate('posts')

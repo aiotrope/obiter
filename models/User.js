@@ -36,11 +36,10 @@ UserSchema.set('toJSON', {
   virtuals: true,
   transform: (document, retObj) => {
     delete retObj.__v
-    delete retObj.password
+    delete retObj.hash
   },
 })
 
 const UserModel = model('UserModel', UserSchema)
-
 
 export default UserModel

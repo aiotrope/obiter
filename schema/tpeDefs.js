@@ -1,4 +1,6 @@
 const typeDefs = `#graphql
+  
+  
   type User {
     id: ID!
     email: String!
@@ -10,10 +12,14 @@ const typeDefs = `#graphql
     value: String!
   }
 
+  input UpdatePostInput {
+    title: String!
+  }
+
   type Post {
     id: ID!
     title: String!
-    postedBy: User!
+    postedBy: User
     comments: [Comment]!
   }
 
@@ -31,18 +37,25 @@ const typeDefs = `#graphql
 
   type Query {
     users: [User]!
-    user: User!
+    user(id: ID!): User!
     posts: [Post!]!
-    post: Post!
+    post(id: ID!): Post!
+    comment(id: ID!): Comment!
     comments: [Comment!]!
-    comment: Comment!
+    
   }
 
   type Mutation {
     signup(email: String!, password: String!): User
     signin(email: String!, password: String!): Token
     createPost(title: String): Post
-    createComment(id: ID!, commentInput: CommentInput): Comment
+    createComment(postId: String!, commentInput: CommentInput!): Comment
+    updatePost(postId: ID!, updatePostInput: UpdatePostInput!): Post
+  }
+  type Subscription {
+    postAdded: Post
+    commentAdded: Comment
+    postUpdated: Post
   }
 `
 

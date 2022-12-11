@@ -10,12 +10,12 @@ const CommentSchema = new Schema({
   },
   commenter: {
     type: Schema.Types.ObjectId,
-    ref: 'UserModel'
+    ref: 'UserModel',
   },
   commentFor: {
     type: Schema.Types.ObjectId,
-    ref: 'PostModel'
-  }
+    ref: 'PostModel',
+  },
 })
 
 CommentSchema.virtual('id').get(function () {
