@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
 
 const Schema = mongoose.Schema
 const model = mongoose.model
@@ -31,7 +30,6 @@ const UserSchema = new Schema({
 UserSchema.virtual('id').get(function () {
   return this._id.toHexString()
 })
-
 UserSchema.set('toJSON', {
   virtuals: true,
   transform: (document, retObj) => {

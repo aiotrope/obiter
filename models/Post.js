@@ -25,7 +25,6 @@ const PostSchema = new Schema({
 PostSchema.virtual('id').get(function () {
   return this._id.toHexString()
 })
-
 PostSchema.set('toJSON', {
   virtuals: true,
   transform: (document, retObj) => {

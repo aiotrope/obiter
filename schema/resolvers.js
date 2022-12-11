@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import dotenv from 'dotenv'
 dotenv.config()
 import { PubSub } from 'graphql-subscriptions'
@@ -8,7 +9,6 @@ import bcrypt from 'bcrypt'
 import UserModel from '../models/User.js'
 import PostModel from '../models/Post.js'
 import CommentModel from '../models/Comment.js'
-import pkg from 'lodash'
 
 const pubsub = new PubSub()
 const User = UserModel
@@ -155,7 +155,6 @@ const resolvers = {
           },
         })
       }
-
       try {
         const post = await Post.findByIdAndUpdate(
           args.postId,
@@ -171,7 +170,6 @@ const resolvers = {
           postedBy: post.postedBy,
           comments: post.comments,
         }
-
         pubsub.publish('POST_UPDATED', { postUpdated: updatedPost })
         return post
       } catch (error) {
@@ -215,9 +213,7 @@ const resolvers = {
           commenter: savedComment.commenter,
           commentFor: savedComment.commentFor,
         }
-
         pubsub.publish('COMMENT_ADDED', { commentAdded: addedComment })
-
         return comment
       } catch (error) {
         throw new GraphQLError(`Error: ${error.message}`, {
@@ -234,11 +230,9 @@ const resolvers = {
     postAdded: {
       subscribe: () => pubsub.asyncIterator('POST_ADDED'),
     },
-
     commentAdded: {
       subscribe: () => pubsub.asyncIterator('COMMENT_ADDED'),
     },
-
     postUpdated: {
       subscribe: () => pubsub.asyncIterator('POST_UPDATED'),
     },
@@ -287,7 +281,6 @@ const resolvers = {
       const user = await User.findById(parent.commenter)
         .populate('posts')
         .populate('commentsMade')
-
       return user
     },
     commentFor: async (parent, args, contextValue, info) => {

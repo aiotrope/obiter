@@ -26,7 +26,6 @@ const options = {
 if (process.env.NODE_ENV === 'development') {
   db_uri = process.env.MONGO_DEV
 }
-
 mongoose.connect(db_uri, options).then(
   () => {
     console.log('Database connected')
@@ -35,20 +34,15 @@ mongoose.connect(db_uri, options).then(
     console.log(err)
   }
 )
-
 const startGraphQLServer = async () => {
   const app = express()
   const httpServer = http.createServer(app)
-
   const schema = makeExecutableSchema({ typeDefs, resolvers })
-
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: '/',
   })
-
   const serverCleanup = useServer({ schema }, wsServer)
-
   const server = new ApolloServer({
     schema,
     context: async ({ req }) => {
@@ -94,9 +88,7 @@ const startGraphQLServer = async () => {
       },
     })
   )
-
   const PORT = 4000
-
   httpServer.listen(PORT, () =>
     console.log(`Server is now running on http://localhost:${PORT}`)
   )
